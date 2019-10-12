@@ -15,31 +15,35 @@ Dựa theo bài hướng dẫn ở [đây](https://mechatronicsblog.com/cross-co
 ```
 Chọn Recommended Repair 
 	
----
-** Bước phụ 2 : Cài Raspbian bản full cho Pi **
-- Tải về từ trang chủ
-- Ghi ra thẻ nhớ bằng phần mềm balenaEtcher (Thẻ từ Class10 và 8G trở lên)
-- Mở thư mục trên thẻ nhớ, thêm file ssh vào (Kích hoạt SSH cho Pi)
-- Cắm thẻ nhớ và cấp nguồn cho Pi
+## Bước phụ 2 : Cài Raspbian bản full cho Pi
+* Tải về từ [trang chủ](https://www.raspberrypi.org/downloads/raspbian/)
+* Ghi ra thẻ nhớ bằng phần mềm balenaEtcher (Thẻ từ **Class10** và **8GB** trở lên)
+* Mở thư mục trên thẻ nhớ, thêm file **ssh** vào (Kích hoạt SSH cho Pi)
+* Cắm thẻ nhớ và cấp nguồn cho Pi
 
----
-** Bước phụ 3 : Thiết lập và truy cập vào Pi từ Co **
+## Bước phụ 3 : Thiết lập và truy cập vào Pi từ máy tính (Co)
+```sh
 sudo nano /etc/hosts
-
-+++++++++++++++++++++++++++++++++++++++
-# Dinh nghia dia chi ip thanh ten mien cho de cau hinh
-# Tim dia chi hien tai cua pi thay vao
-# Vi du
-192.168.1.24    piboard.com
-+++++++++++++++++++++++++++++++++++++++
-
+```
+* pi_ip    tên miền tự đặt 
+* ví dụ 
+```sh
+192.168.1.24  piboard.com
+`	``piboard.com
+* truy cập vào Pi qua SSH
+```sh
 ssh pi@piboard.com 
+```
+* Thiết lập hệ thống local và bật các ngoại vi nếu cần thiết
+```sh
 sudo raspi-config
-	> Thiết lập hệ thống local và bật các ngoại vi nếu cần thiết.
+```
+* Khởi động lại Pi
+```sh
 sudo reboot
-
----
-** Tổng quan các bước cài: **
+```
+Tổng quan các bước cài Qt Cross
+------------
 1. Cài đặt các thư viện phát triển – [Pi]
 2. Chuẩn bị thư mục đích – [Pi]
 3. Tạo thư mục làm việc và thiết lập toolchain – [Co]
@@ -52,9 +56,9 @@ sudo reboot
 [Pi]: Làm trên Raspberry Pi
 [Co]: Làm trên máy tính chạy Ubuntu 
 
----
-** Các bước cài: **
-1. Cài đặt các thư viện phát triển – [Pi]
+Các bước cài 
+------------
+# 1. Cài đặt các thư viện phát triển – [Pi]
 sudo nano /etc/apt/sources.list
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
