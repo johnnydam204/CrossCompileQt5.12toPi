@@ -48,12 +48,19 @@ sudo reboot
 Tổng quan các bước cài Qt Cross
 ------------
 **1. Cài đặt các thư viện phát triển – [Pi]**
+
 **2. Chuẩn bị thư mục đích – [Pi]**
+
 **3. Tạo thư mục làm việc và thiết lập toolchain – [Co]**
+
 **4. Tạo và cấu hình sysroot – [Co]**
+
 **5. Tải về Qt – [Co]**
+
 **6. Cấu hình Qt Everywhere biên dịch chéo cho Pi  – [Co]**
+
 **7. Make và make install – [Co]**
+
 **8. Thiết lập Qt Creator để biên dịch chéo cho Pi – [Co]**
 
 [Pi]: Làm trên Raspberry Pi
