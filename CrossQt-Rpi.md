@@ -44,14 +44,14 @@ sudo reboot
 ```
 Tổng quan các bước cài Qt Cross
 ------------
-1. Cài đặt các thư viện phát triển – [Pi]
-2. Chuẩn bị thư mục đích – [Pi]
-3. Tạo thư mục làm việc và thiết lập toolchain – [Co]
-4. Tạo và cấu hình sysroot – [Co]
-5. Tải về Qt – [Co]
-6. Cấu hình Qt Everywhere biên dịch chéo cho Pi  – [Co]
-7. Make và make install – [Co]
-8. Thiết lập Qt Creator để biên dịch chéo cho Pi – [Co]
+**1. Cài đặt các thư viện phát triển – [Pi]**
+**2. Chuẩn bị thư mục đích – [Pi]**
+**3. Tạo thư mục làm việc và thiết lập toolchain – [Co]**
+**4. Tạo và cấu hình sysroot – [Co]**
+**5. Tải về Qt – [Co]**
+**6. Cấu hình Qt Everywhere biên dịch chéo cho Pi  – [Co]**
+**7. Make và make install – [Co]**
+**8. Thiết lập Qt Creator để biên dịch chéo cho Pi – [Co]**
 
 [Pi]: Làm trên Raspberry Pi
 
@@ -131,17 +131,20 @@ gedit qtbase/mkspecs/devices/linux-rasp-pi-g++/qmake.conf
 ```
 Tìm và thay thế:
 
-Thay thế "-lEGL" --> "-lbrcmEGL"
-Thay thế "-LGLESv2" --> "-lbrcmGLESv2"
+Thay thế "**-lEGL**" --> "**-lbrcmEGL**"
+
+Thay thế "**-LGLESv2**" --> "**-lbrcmGLESv2**"
 
 * Chạy **./configure**
 
+Trong thư mục qt-everywhere-src-5.12.3
+
 Chú ý:
 
-	* Qt5.12: 				thông số -device là -device linux-rasp-pi3-g++
-	* Qt5.12.2 đến 5.12.5:	thông số -device là -device linux-rasp-pi-g++ 
+	* Qt5.12: thông số **-device** là **-device linux-rasp-pi3-g++**
+	* Qt5.12.2 đến 5.12.5:	thông số **-device** là **-device linux-rasp-pi-g++** 
 
-Ví dụ bản 5.12.3,tTrong thư mục qt-everywhere-src-5.12.3
+Ví dụ bản 5.12.3
 
 ```
 ./configure -release -opengl es2 -device linux-rasp-pi-g++ -device-option CROSS_COMPILE=$HOME/raspi/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/bin/arm-linux-gnueabihf- -sysroot ~/raspi/sysroot -opensource -confirm-license -skip qtwayland -skip qtlocation -skip qtscript -make libs -prefix /usr/local/qt5pi -extprefix ~/raspi/qt5pi -hostprefix ~/raspi/qt5 -no-use-gold-linker -v -no-gbm
@@ -250,9 +253,8 @@ ssh-copy-id pi@piboard.com
 			
 			Thiết lập tên và icon tùy ý (thường là Raspberry Pi)
 			
-			Các thiết lập quan trọng:
-			
-			```
+			Các thiết lập quan trọng:			
+
 				Device type: Generic Linux Device
 				Device: Raspberry Pi (defaut for Generic Linux)
 				Sysroot: ~/raspi/sysroot
@@ -260,41 +262,56 @@ ssh-copy-id pi@piboard.com
 				Compiler C++: GCC (Raspberry Pi)
 				Debugger: GDB (Raspberry Pi)
 				Qt version: Qt 5.12 (Raspberry Pi)
-			```
----
-** Phụ lục 1: Sửa lỗi [Pi]**
+
+
+## Phụ lục 1: Sửa lỗi [Pi]
+```sh
 sudo mv /usr/lib/arm-linux-gnueabihf/libGLESv2.so.2 /usr/lib/arm-linux-gnueabihf/libGLESv2.so.2.bak
+
 sudo ln -s /opt/vc/lib/libbrcmGLESv2.so /usr/lib/arm-linux-gnueabihf/libGLESv2.so.2
 
 sudo mv /usr/lib/arm-linux-gnueabihf/libEGL.so.1 /usr/lib/arm-linux-gnueabihf/libEGL.so.1.bak
+
 sudo ln -s /opt/vc/lib/libEGL.so /usr/lib/arm-linux-gnueabihf/libEGL.so.1
 
 sudo ln -s /opt/vc/lib/libbrcmEGL.so /opt/vc/lib/libEGL.so
+
 sudo ln -s /opt/vc/lib/libbrcmGLESv2.so /opt/vc/lib/libGLESv2.so
 
 sudo ln -s /opt/vc/lib/libEGL.so /opt/vc/lib/libEGL.so.1
+
 sudo ln -s /opt/vc/lib/libGLESv2.so /opt/vc/lib/libGLESv2.so.2
 
 sudo nano ~/.profile
+```
 
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+```
 # physical display properties in mm
 export QT_QPA_EGLFS_PHYSICAL_WIDTH=156
 export QT_QPA_EGLFS_PHYSICAL_HEIGHT=86
-
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+```
+```sh
 source ~/.profile
+```
 
----
-** Phụ lục 2: Tải Font chữ [Pi]**
+## Phụ lục 2: Tải Font chữ [Pi]
+
+Từ bản Qt5, Qt không cung cấp font cho thiết bị nhúng
+
+Do đó cần tải thủ công để bổ sung và đưa vào thư mục Font
+
+```sh
 mkdir /usr/local/qt5pi/lib/fonts
-Tải font từ trang: https://dejavu-fonts.github.io
-Giải nén và copy vào thư mục /usr/local/qt5pi/lib/fonts
+```
+Tải font [ở đây](https://dejavu-fonts.github.io)
 
----
-** Phụ lục 3: Cài thêm thư viện phát triển[Co]**
+Giải nén và copy vào thư mục 
+```sh
+/usr/local/qt5pi/lib/fonts
+```
+
+## Phụ lục 3: Cài thêm thư viện phát triển[Co]
+```sh
 sudo apt-get install libgl-dev
 sudo apt-get install mesa-common-dev zlib1g-dev
 sudo apt-get install libglu1-mesa-dev freeglut3-dev mesa-common-dev libgl1-mesa-dev
@@ -302,4 +319,12 @@ sudo apt-get install libxi-dev build-essential libdbus-1-dev libfontconfig1-dev 
 sudo apt-get install libqt4-dev libqt4-opengl-dev
 sudo apt-get install libqt5opengl5-dev
 sudo apt install libncurses5
-
+```
+Kết luận
+-------
+* Đã được kiểm chứng thành công trên 
+	* Ubuntu 19.04
+	* Qt5.12.3 
+	* Raspberry Pi 3B+ 
+	* Màn hình LCD 7 Inch IPS CapTouch
+* Bản hướng dẫn là "As Is", miễn trừ mọi trách nhiệm 
