@@ -2,7 +2,7 @@
 Dựa theo bài hướng dẫn ở [đây](https://mechatronicsblog.com/cross-compile-and-deploy-qt-5-12-for-raspberry-pi/)
 
 ## Bước phụ 1 : Cài bản Ubuntu
-* Tải và burn BootUSB (Bằng rufus trên windows hoặc Starup Disk Creator trên ubuntu)
+* Tải và burn **BootUSB** (Bằng **rufus** trên **windows** hoặc **Starup Disk Creator** trên **ubuntu**)
 * Sửa lỗi Boot (nếu có):
 	* Chạy Ubuntu trên BootUSB
 	* Kết nối mạng
@@ -13,11 +13,11 @@ Dựa theo bài hướng dẫn ở [đây](https://mechatronicsblog.com/cross-co
 	sudo apt-get install -y boot-repair
 	boot-repair 	
 ```
-Chọn Recommended Repair 
+Chọn **Recommended Repair** 
 	
 ## Bước phụ 2 : Cài Raspbian bản full cho Pi
 * Tải về từ [trang chủ](https://www.raspberrypi.org/downloads/raspbian/)
-* Ghi ra thẻ nhớ bằng phần mềm balenaEtcher (Thẻ từ **Class10** và **8GB** trở lên)
+* Ghi ra thẻ nhớ bằng phần mềm **balena Etcher** (Thẻ từ **Class10** và **8GB** trở lên)
 * Mở thư mục trên thẻ nhớ, thêm file **ssh** vào (Kích hoạt SSH cho Pi)
 * Cắm thẻ nhớ và cấp nguồn cho Pi
 
@@ -25,11 +25,14 @@ Chọn Recommended Repair
 ```sh
 sudo nano /etc/hosts
 ```
-	* pi_ip		tên miền tự đặt 
-	* ví dụ: 
-```sh
+Thiết lập ip của Pi hiện tại thành một tên miền tùy ý, dễ nhớ
+
+Ví dụ: 
+
+```
 192.168.1.24  piboard.com
 ```
+
 * truy cập vào Pi qua SSH
 ```sh
 ssh pi@piboard.com 
