@@ -1,18 +1,19 @@
-** Dựa theo bài viết sau: **
-https://mechatronicsblog.com/cross-compile-and-deploy-qt-5-12-for-raspberry-pi/
+# Cài đặt và cấu hình trình biên dịch chéo QT cho Raspberry Pi
+Dựa theo bài hướng dẫn ở [đây](https://mechatronicsblog.com/cross-compile-and-deploy-qt-5-12-for-raspberry-pi/)
 
----
-** Bước phụ 1 : Cài bản Ubuntu **
-- Tải và burn BootUSB (Bằng rufus trên windows hoặc Starup Disk Creator trên ubuntu)
-- Sửa lỗi Boot (nếu có):
-+ Chạy Ubuntu trên BootUSB
-+ Kết nối mạng
-+ Cài Boot Repair: https://www.howtogeek.com/114884/how-to-repair-grub2-when-ubuntu-wont-boot/
+## Bước phụ 1 : Cài bản Ubuntu
+* Tải và burn BootUSB (Bằng rufus trên windows hoặc Starup Disk Creator trên ubuntu)
+* Sửa lỗi Boot (nếu có):
+	* Chạy Ubuntu trên BootUSB
+	* Kết nối mạng
+	* Nếu không boot được vào Ubuntu, cần cài [Boot Repair](https://www.howtogeek.com/114884/how-to-repair-grub2-when-ubuntu-wont-boot/)
+```sh
 	sudo apt-add-repository ppa:yannubuntu/boot-repair
 	sudo apt-get update
 	sudo apt-get install -y boot-repair
-	boot-repair
- 	> Recommended Repair 
+	boot-repair 	
+```
+Chọn Recommended Repair 
 	
 ---
 ** Bước phụ 2 : Cài Raspbian bản full cho Pi **
