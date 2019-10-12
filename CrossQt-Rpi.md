@@ -25,11 +25,11 @@ Chọn Recommended Repair
 ```sh
 sudo nano /etc/hosts
 ```
-* pi_ip    tên miền tự đặt 
-* ví dụ 
+	* pi_ip		tên miền tự đặt 
+	* ví dụ: 
 ```sh
 192.168.1.24  piboard.com
-`	``piboard.com
+```
 * truy cập vào Pi qua SSH
 ```sh
 ssh pi@piboard.com 
@@ -54,78 +54,101 @@ Tổng quan các bước cài Qt Cross
 8. Thiết lập Qt Creator để biên dịch chéo cho Pi – [Co]
 
 [Pi]: Làm trên Raspberry Pi
+
 [Co]: Làm trên máy tính chạy Ubuntu 
 
 Các bước cài 
 ------------
-# 1. Cài đặt các thư viện phát triển – [Pi]
+## 1. Cài đặt các thư viện phát triển – [Pi]
+```sh
 sudo nano /etc/apt/sources.list
-
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+```
+```
 deb http://raspbian.raspberrypi.org/raspbian/ buster main contrib non-free rpi
 # Uncomment line below then 'apt-get update' to enable 'apt-get source'
 deb-src http://raspbian.raspberrypi.org/raspbian/ buster main contrib non-free rpi
-
-++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+```
+```sh
 sudo apt-get update
 sudo apt-get build-dep qt4-x11
 sudo apt-get build-dep libqt5gui5
 sudo apt-get install libudev-dev libinput-dev libts-dev libxcb-xinerama0-dev libxcb-xinerama0
+```
 
-2. Chuẩn bị thư mục đích – [Pi]
+## 2. Chuẩn bị thư mục đích – [Pi]
+```sh
 sudo mkdir /usr/local/qt5pi
 sudo chown pi:pi /usr/local/qt5pi
 sudo chown -R pi:pi /opt
 sudo chmod -R 775 /usr/lib/cups/backend/
+```
 
-3. Tạo thư mục làm việc và thiết lập toolchain – [Co]
+## 3. Tạo thư mục làm việc và thiết lập toolchain – [Co]
+```sh
 mkdir ~/raspi
 cd ~/raspi
 sudo apt-get install git -y
 git clone https://github.com/raspberrypi/tools
+```
 
-4. Tạo và cấu hình sysroot – [Co]
-Trong thư mục ~/raspi:
+## 4 . Tạo và cấu hình sysroot – [Co]
+
+* Trong thư mục ~/raspi:
+```sh
 mkdir sysroot sysroot/usr sysroot/opt
+```
 
+* Đồng bộ
+```sh
 rsync -avz pi@piboard.com:/lib sysroot
 rsync -avz pi@piboard.com:/usr/include sysroot/usr
 rsync -avz pi@piboard.com:/usr/lib sysroot/usr
 rsync -avz pi@piboard.com:/opt/vc sysroot/opt
-
+```
+* Tải sysroot
+```sh
 wget https://raw.githubusercontent.com/riscv/riscv-poky/master/scripts/sysroot-relativelinks.py
 chmod +x sysroot-relativelinks.py
 sudo apt-get install python -y
 ./sysroot-relativelinks.py sysroot
+```
 
-5. Tải về Qt – [Co]
-http://download.qt.io/official_releases/qt/5.12/5.12.3/single/qt-everywhere-src-5.12.3.tar.xz
-http://download.qt.io/official_releases/qt/5.12/5.12.3/qt-opensource-linux-x64-5.12.3.run
-Copy file vừa tải về thư mục ~/raspi
-Giải nén:
+## 5. Tải về Qt – [Co]
+* Tải trình biên dịch [Qt](http://download.qt.io/official_releases/qt/5.12/5.12.3/single/qt-everywhere-src-5.12.3.tar.xz)
+* Tải [QtCreator](http://download.qt.io/official_releases/qt/5.12/5.12.3/qt-opensource-linux-x64-5.12.3.run)
+* Copy file vừa tải về thư mục **~/raspi**
+* Giải nén:
+```sh
 tar xvf qt-everywhere-src-5.12.3.tar.xz
 cd qt-everywhere-src-5.12.3
+```
 
-6. Cấu hình Qt Everywhere biên dịch chéo cho Pi  – [Co]
+## 6. Cấu hình Qt Everywhere biên dịch chéo cho Pi  – [Co]
+
+* Cấu hình qmake
+```sh
 gedit qtbase/mkspecs/devices/linux-rasp-pi-g++/qmake.conf
+```
+Tìm và thay thế:
 
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Thay thế "-lEGL" --> "-lbrcmEGL"
+Thay thế "-LGLESv2" --> "-lbrcmGLESv2"
 
-Replace "-lEGL" --> "-lbrcmEGL"
-Replace "-LGLESv2" --> "-lbrcmGLESv2"
+* Chạy **./configure**
 
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Qt5.12: 				thông số -device là -device linux-rasp-pi3-g++
-Qt5.12.2 đến 5.12.5:	thông số -device là -device linux-rasp-pi-g++ 
+Chú ý:
+
+	* Qt5.12: 				thông số -device là -device linux-rasp-pi3-g++
+	* Qt5.12.2 đến 5.12.5:	thông số -device là -device linux-rasp-pi-g++ 
 
 Ví dụ bản 5.12.3,tTrong thư mục qt-everywhere-src-5.12.3
 
+```
 ./configure -release -opengl es2 -device linux-rasp-pi-g++ -device-option CROSS_COMPILE=$HOME/raspi/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/bin/arm-linux-gnueabihf- -sysroot ~/raspi/sysroot -opensource -confirm-license -skip qtwayland -skip qtlocation -skip qtscript -make libs -prefix /usr/local/qt5pi -extprefix ~/raspi/qt5pi -hostprefix ~/raspi/qt5 -no-use-gold-linker -v -no-gbm
+```
 
-Thông báo thành công trên Terminal:
-
+* Thông báo thành công trên Terminal:
+```
 Build options:
 ......
 QPA backends:
@@ -135,73 +158,109 @@ QPA backends:
     ......
     EGLFS Raspberry Pi ................... yes
     ......
+```
+## 7. Make và make install – [Co]
 
-7. Make và make install – [Co]
 Bước này sẽ kéo dài ít nhất 2h đồng hồ, tùy vào cấu hình máy
-+ Máy cấu hình yếu: 
-make
-+ Máy cấu hình mạnh (nếu dùng cho máy yếu sẽ gây treo hoặc tự tắt máy)
-make -j 4
 
+* Máy cấu hình yếu: 
+```sh
+make
+```
+* Máy cấu hình mạnh (nếu dùng cho máy yếu sẽ gây treo hoặc tự tắt máy)
+```sh
+make -j 4
+```
+* Cài đặt
+```sh
 make install
 cd ..
 rsync -avz qt5pi pi@piboard.com:/usr/local
+```
 
-8. Thiết lập Qt Creator để biên dịch chéo cho Pi – [Co]
-- Cài đặt QtCreator
+## 8. Thiết lập Qt Creator để biên dịch chéo cho Pi – [Co]
+
+* Cài đặt QtCreator
+```sh
 sudo chmod +x qt-opensource-linux-x64-5.12.3.run
 ./qt-opensource-linux-x64-5.12.3.run
-- Bỏ các lựa chọn Android và Script
-- SSH sang Pi để thiết lập SSH Key 
+```
+Bỏ các lựa chọn Android và Script
+
+* SSH sang Pi để thiết lập SSH Key 
+```sh
 ssh-keygen
 Enter
 Enter
 ls ~/.ssh
-	> Nhìn thấy có 2 file id_rsa và id_rsa.pub
+```
+Nhìn thấy có 2 file **id_rsa** và **id_rsa.pub**
+```sh
 ssh-copy-id pi@piboard.com
-- Dùng FTP Client (FireZilla), copy 2 file id_rsa và id_rsa.pub từ Pi sang Co
+```
+* Dùng **FTP Client** (**FireZilla**), copy 2 file **id_rsa** và **id_rsa.pub** từ Pi sang Co
+
 (Cài FireZilla, nhập ip, username và password của Pi vào để kết nối FTP)
 
-- Mở QtCreator
-+ Tools -> Options -> Devices section -> Devices tab -> Add a new "Generic Linux Device".
-++ Name: Raspberry Pi
-++ Network: piboard.com
-++ Key: id_rsa
-++ Nhấn Test, nếu kết nối được là thành công
+* Cấu hình QtCreator
+	* Tools -> Options -> Devices section -> Devices tab -> Add a new "Generic Linux Device".
+	
+		Name: Raspberry Pi
 
-- Kits section: 
-+ Compilers tab: 
-++ Add GCC C: GCC (Raspberry Pi)
-++ Path:
-~/raspi/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/arm-linux-gnueabihf/bin/gcc
+		Network: piboard.com
 
-++ Add GCC C++: GCC (Raspberry Pi)
-++ Path:
-~/raspi/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/arm-linux-gnueabihf/bin/g++
+		Key: id_rsa
 
-+ Debuggers tab:
-++ Add: GDB (Raspberry Pi)
-++ Path:
-~/raspi/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/bin/arm-linux-gnueabihf-gdb
+		Nhấn Test, nếu kết nối được là thành công
 
-+ Qt Versions tab:
-++ Add a new version: Qt 5.12 (Raspberry Pi)
-++ Path:
-~/raspi/qt5/bin/qmake
+	* Kits section: 
+	
+		**Compilers tab:**
+		
+			Add GCC C: GCC (Raspberry Pi)
+			
+			Path:
+			
+			~/raspi/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/arm-linux-gnueabihf/bin/gcc
 
-+ Kits tab:
-++ Add a new kit
-++ Thiết lập tên và icon tùy ý (thường là Raspberry Pi)
-++ Các thiết lập quan trọng:
+			Add GCC C++: GCC (Raspberry Pi)
+			
+			Path:
+			
+			~/raspi/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian-x64/arm-linux-gnueabihf/bin/g++
 
-Device type: Generic Linux Device
-Device: Raspberry Pi (defaut for Generic Linux)
-Sysroot: ~/raspi/sysroot
-Compiler C: GCC (Raspberry Pi)
-Compiler C++: GCC (Raspberry Pi)
-Debugger: GDB (Raspberry Pi)
-Qt version: Qt 5.12 (Raspberry Pi)
+		**Debuggers tab**
+		
+			Add: GDB (Raspberry Pi)
+			
+			Path:
+			
+			~/raspi/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/bin/arm-linux-gnueabihf-gdb
 
+		**Qt Versions tab**
+		
+			Add a new version: Qt 5.12 (Raspberry Pi)
+			
+			Path:
+			
+			~/raspi/qt5/bin/qmake
+
+		**Kits tab**
+			Add a new kit
+			
+			Thiết lập tên và icon tùy ý (thường là Raspberry Pi)
+			
+			Các thiết lập quan trọng:
+			
+			```
+				Device type: Generic Linux Device
+				Device: Raspberry Pi (defaut for Generic Linux)
+				Sysroot: ~/raspi/sysroot
+				Compiler C: GCC (Raspberry Pi)
+				Compiler C++: GCC (Raspberry Pi)
+				Debugger: GDB (Raspberry Pi)
+				Qt version: Qt 5.12 (Raspberry Pi)
+			```
 ---
 ** Phụ lục 1: Sửa lỗi [Pi]**
 sudo mv /usr/lib/arm-linux-gnueabihf/libGLESv2.so.2 /usr/lib/arm-linux-gnueabihf/libGLESv2.so.2.bak
