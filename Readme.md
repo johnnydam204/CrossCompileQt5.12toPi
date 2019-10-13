@@ -119,7 +119,8 @@ rsync -avz pi@piboard.com:/opt/vc sysroot/opt
 ```sh
 wget https://raw.githubusercontent.com/riscv/riscv-poky/master/scripts/sysroot-relativelinks.py
 ```
-	*Hoặc tải từ chính kho chứa này*
+*Hoặc tải từ chính kho chứa này*
+
 * Cài đặt
 ```sh
 chmod +x sysroot-relativelinks.py
