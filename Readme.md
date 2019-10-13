@@ -151,8 +151,8 @@ Trong thư mục qt-everywhere-src-5.12.3
 
 Chú ý:
 
-	* Qt5.12: thông số **-device** là **-device linux-rasp-pi3-g++**
-	* Qt5.12.2 đến 5.12.5:	thông số **-device** là **-device linux-rasp-pi-g++** 
+	* Qt5.12: thông số -device là -device linux-rasp-pi3-g++
+	* Qt5.12.2 đến 5.12.5:	thông số -device là -device linux-rasp-pi-g++
 
 Ví dụ bản 5.12.3
 
