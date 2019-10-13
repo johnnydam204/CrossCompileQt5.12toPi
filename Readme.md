@@ -118,6 +118,10 @@ rsync -avz pi@piboard.com:/opt/vc sysroot/opt
 * Tải sysroot
 ```sh
 wget https://raw.githubusercontent.com/riscv/riscv-poky/master/scripts/sysroot-relativelinks.py
+```
+Hoặc tải từ kho chứa này
+
+```sh
 chmod +x sysroot-relativelinks.py
 sudo apt-get install python -y
 ./sysroot-relativelinks.py sysroot
