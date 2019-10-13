@@ -119,8 +119,8 @@ rsync -avz pi@piboard.com:/opt/vc sysroot/opt
 ```sh
 wget https://raw.githubusercontent.com/riscv/riscv-poky/master/scripts/sysroot-relativelinks.py
 ```
-Hoặc tải từ kho chứa này
-
+	*Hoặc tải từ chính kho chứa này*
+* Cài đặt
 ```sh
 chmod +x sysroot-relativelinks.py
 sudo apt-get install python -y
@@ -145,9 +145,9 @@ gedit qtbase/mkspecs/devices/linux-rasp-pi-g++/qmake.conf
 ```
 Tìm và thay thế:
 
-Thay thế "**-lEGL**" --> "**-lbrcmEGL**"
+Thay thế **-lEGL** --> **-lbrcmEGL**
 
-Thay thế "**-LGLESv2**" --> "**-lbrcmGLESv2**"
+Thay thế **-LGLESv2**" --> "**-lbrcmGLESv2**
 
 * Chạy **./configure**
 
